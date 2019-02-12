@@ -1,77 +1,45 @@
 
+int IRledPin =  13;  
+int estado=0;
+
+void setup()   {
+
+pinMode(IRledPin, OUTPUT);
  
-int pinled = 12; 
-int pinopir = 11; 
-int pinledv = 3;
-int acionamento;
-int IRledPin=13;    
-int estado=3;
-int estadoAnterior=4;
+Serial.begin(9600);
 
-
-void setup()
-  {
-    pinMode(pinled, OUTPUT); 
-    pinMode(pinledv, OUTPUT);
-    pinMode(IRledPin, OUTPUT); 
-    pinMode(pinopir, INPUT);
-    Serial.begin(9600);
-  }
+delay(5000);
+}
  
 void loop()
-  {
-  acionamento = digitalRead(pinopir); //Le o valor do sensor PIR
+{
+Serial.println("Sending IR signal");
  
-  if (acionamento == LOW) //Sem movimento, mantem rele desligado
-    {
-    digitalWrite(pinled, LOW);
-    digitalWrite(pinledv, HIGH);
-    Serial.println("Parado");
-    estado=0;
-    }
-  else //Caso seja detectado um movimento, aciona o rele
-    {
-    digitalWrite(pinled, HIGH);
-    digitalWrite(pinledv, LOW);
-    Serial.println("Movimento !!!");
-    estado=1;
-    }
-
-  if (estado != estadoAnterior)
-    {
-    SendChannelUpCode();
-    estadoAnterior=estado;
-    }
-  }
-
+SendChannelUpCode();
+//delay(5000);
+}
 
 void pulseIR(long microsecs) {
 
- 
-cli();  
+cli(); 
  
 while (microsecs > 0) {
 
-digitalWrite(IRledPin, HIGH); 
-delayMicroseconds(10);        
-digitalWrite(IRledPin, LOW);  
-delayMicroseconds(10);        
+digitalWrite(IRledPin, HIGH);  
+delayMicroseconds(10);         
+digitalWrite(IRledPin, LOW);   
+delayMicroseconds(10);         
  
+
 microsecs -= 26;
 }
-
+ 
 sei(); 
 }
  
-
-
-
-
-
-
 void SendChannelUpCode() {
 
-if (estado==1)
+if (estado==0)
 {
 delayMicroseconds(31036);
 pulseIR(4480);
@@ -273,9 +241,11 @@ delayMicroseconds(1700);
 pulseIR(520);
 delayMicroseconds(1680);
 pulseIR(520);
+estado=1;
+delay(5000);
 }
 
-if (estado==0)
+if (estado==1)
 {
 
 delayMicroseconds(62392);
@@ -478,5 +448,7 @@ delayMicroseconds(1820);
 pulseIR(420);
 delayMicroseconds(1820);
 pulseIR(420);
+estado=0;
+delay(5000);
 }
 }

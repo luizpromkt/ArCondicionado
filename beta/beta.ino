@@ -1,53 +1,69 @@
 
-// This sketch will send out a Nikon D50 trigger signal (probably works with most Nikons)
-// See the full tutorial at http://www.ladyada.net/learn/sensors/ir.html
-// this code is public domain, please enjoy!
- 
-int IRledPin =  13;    // LED connected to digital pin 13
-int estado=0;
-// The setup() method runs once, when the sketch starts
- 
-void setup()   {
-// initialize the IR digital pin as an output:
-pinMode(IRledPin, OUTPUT);
- 
-Serial.begin(9600);
+int pinled = 12; 
+int pinopir = 11; 
+int pinledv = 3;
+int acionamento;
+int IRledPin=13;    
+int estado=3;
+int estadoAnterior=4;
 
-delay(5000);
-}
+void setup()
+  {
+    pinMode(pinled, OUTPUT); 
+    pinMode(pinledv, OUTPUT);
+    pinMode(IRledPin, OUTPUT); 
+    pinMode(pinopir, INPUT);
+    Serial.begin(9600);
+  }
  
 void loop()
-{
-Serial.println("Sending IR signal");
+  {
+  acionamento = digitalRead(pinopir);
  
-SendChannelUpCode();
-//delay(5000);
-}
- 
-// This procedure sends a 38KHz pulse to the IRledPin
-// for a certain # of microseconds. We'll use this whenever we need to send codes
+  if (acionamento == LOW)
+    {
+    digitalWrite(pinled, LOW);
+    digitalWrite(pinledv, HIGH);
+  //  Serial.println("Parado");
+    estado=0;
+    }
+  else
+    {
+    digitalWrite(pinled, HIGH);
+    digitalWrite(pinledv, LOW);
+  //  Serial.println("Movimento !!!");
+    estado=1;
+    }
+
+  if (estado != estadoAnterior)
+    {
+    SendChannelUpCode();
+    estadoAnterior=estado;
+    }
+  }
+
+
 void pulseIR(long microsecs) {
-// we'll count down from the number of microseconds we are told to wait
- 
-cli();  // this turns off any background interrupts
- 
+cli();  
 while (microsecs > 0) {
-// 38 kHz is about 13 microseconds high and 13 microseconds low
-digitalWrite(IRledPin, HIGH);  // this takes about 3 microseconds to happen
-delayMicroseconds(10);         // hang out for 10 microseconds
-digitalWrite(IRledPin, LOW);   // this also takes about 3 microseconds
-delayMicroseconds(10);         // hang out for 10 microseconds
- 
-// so 26 microseconds altogether
+digitalWrite(IRledPin, HIGH); 
+delayMicroseconds(10);        
+digitalWrite(IRledPin, LOW);  
+delayMicroseconds(10);        
 microsecs -= 26;
 }
- 
-sei();  // this turns them back on
+sei(); 
 }
  
+
+
+
+
+
+
 void SendChannelUpCode() {
 
-if (estado==0)
+if (estado==1)
 {
 delayMicroseconds(31036);
 pulseIR(4480);
@@ -249,12 +265,9 @@ delayMicroseconds(1700);
 pulseIR(520);
 delayMicroseconds(1680);
 pulseIR(520);
-estado=1;
-delay(5000);
 }
 
-
-if (estado==1)
+if (estado==0)
 {
 
 delayMicroseconds(62392);
@@ -457,7 +470,5 @@ delayMicroseconds(1820);
 pulseIR(420);
 delayMicroseconds(1820);
 pulseIR(420);
-estado=0;
-delay(5000);
 }
 }
