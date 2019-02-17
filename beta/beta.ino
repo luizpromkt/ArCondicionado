@@ -1,3 +1,6 @@
+#include <Thermistor.h> //INCLUSÃO DA BIBLIOTECA
+ 
+Thermistor temp(2);
 
 int pinled = 12; 
 int pinopir = 11; 
@@ -6,7 +9,7 @@ int acionamento;
 int IRledPin=13;    
 int estado=3;
 int estadoAnterior=4;
-
+int temperatura;
 void setup()
   {
     pinMode(pinled, OUTPUT); 
@@ -14,25 +17,52 @@ void setup()
     pinMode(IRledPin, OUTPUT); 
     pinMode(pinopir, INPUT);
     Serial.begin(9600);
+    delay(1000);
   }
  
 void loop()
   {
+
+//temperatura
+
+
+
+
+    
+  int temperature = temp.getTemp(); //VARIÁVEL DO TIPO INTEIRO QUE RECEBE O VALOR DE TEMPERATURA CALCULADO PELA BIBLIOTECA
+  Serial.print("Temperatura: "); //IMPRIME O TEXTO NO MONITOR SERIAL
+  Serial.print(temperature); //IMPRIME NO MONITOR SERIAL A TEMPERATURA MEDIDA
+  Serial.println("*C"); //IMPRIME O TEXTO NO MONITOR SERIAL
+  // delay(1000); //INTERVALO DE 1 SEGUNDO
   acionamento = digitalRead(pinopir);
- 
+
+
+
+
+
+//if (temperature >=30)
+
+//{
   if (acionamento == LOW)
     {
     digitalWrite(pinled, LOW);
-    digitalWrite(pinledv, HIGH);
+    digitalWrite(pinledv, LOW);
   //  Serial.println("Parado");
     estado=0;
     }
   else
     {
+      if (temperature >30) {
     digitalWrite(pinled, HIGH);
-    digitalWrite(pinledv, LOW);
+    digitalWrite(pinledv, HIGH);
   //  Serial.println("Movimento !!!");
     estado=1;
+      }
+      else{
+    digitalWrite(pinled, LOW);
+    digitalWrite(pinledv, LOW);
+  //  Serial.println("Parado");
+    estado=0; }
     }
 
   if (estado != estadoAnterior)
@@ -40,9 +70,25 @@ void loop()
     SendChannelUpCode();
     estadoAnterior=estado;
     }
+
+
+/*
+}
+
+
+else {
+  
   }
+    digitalWrite(pinled, LOW);
+    digitalWrite(pinledv, HIGH);
+  //  Serial.println("Parado");
+    estado=0;
 
 
+    
+  }
+*/
+} 
 void pulseIR(long microsecs) {
 cli();  
 while (microsecs > 0) {
