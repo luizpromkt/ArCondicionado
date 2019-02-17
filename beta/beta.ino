@@ -10,6 +10,13 @@ int IRledPin=13;
 int estado=3;
 int estadoAnterior=4;
 int temperatura;
+const int azul = 4;
+const int verde = 10;
+const int vermelho = 5; 
+String cor;
+
+
+
 void setup()
   {
     pinMode(pinled, OUTPUT); 
@@ -17,7 +24,10 @@ void setup()
     pinMode(IRledPin, OUTPUT); 
     pinMode(pinopir, INPUT);
     Serial.begin(9600);
-    delay(1000);
+       pinMode(azul, OUTPUT);
+   pinMode(verde, OUTPUT);
+   pinMode(vermelho, OUTPUT);
+       delay(1000);
   }
  
 void loop()
@@ -38,11 +48,13 @@ void loop()
 
 
 
+      if (temperature >= 23 && temperature <=25 ){delay(1000); verdeFuncao();}
+      if (temperature > 26){delay(1000); vermelhoFuncao();}
+      if (temperature < 22){delay(1000); azulFuncao();}
 
 
-//if (temperature >=30)
 
-//{
+
   if (acionamento == LOW)
     {
     digitalWrite(pinled, LOW);
@@ -52,11 +64,13 @@ void loop()
     }
   else
     {
-      if (temperature >30) {
+      if (temperature >26) {
     digitalWrite(pinled, HIGH);
     digitalWrite(pinledv, HIGH);
   //  Serial.println("Movimento !!!");
     estado=1;
+       
+    
       }
       else{
     digitalWrite(pinled, LOW);
@@ -65,30 +79,34 @@ void loop()
     estado=0; }
     }
 
+
+
   if (estado != estadoAnterior)
     {
     SendChannelUpCode();
     estadoAnterior=estado;
     }
+} 
 
 
-/*
+
+void verdeFuncao(){
+  digitalWrite(azul, LOW);
+  digitalWrite(verde, HIGH);
+  digitalWrite(vermelho, LOW);
 }
 
+void azulFuncao(){
+  digitalWrite(azul, HIGH);
+  digitalWrite(verde, LOW);
+  digitalWrite(vermelho, LOW);
+}
+void vermelhoFuncao(){
+  digitalWrite(azul, LOW);
+  digitalWrite(verde, LOW);
+  digitalWrite(vermelho, HIGH);
+}
 
-else {
-  
-  }
-    digitalWrite(pinled, LOW);
-    digitalWrite(pinledv, HIGH);
-  //  Serial.println("Parado");
-    estado=0;
-
-
-    
-  }
-*/
-} 
 void pulseIR(long microsecs) {
 cli();  
 while (microsecs > 0) {
