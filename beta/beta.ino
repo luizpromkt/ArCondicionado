@@ -1,4 +1,4 @@
-// CAPTAR FUNÇÕES DE DIMINUIR E ALMENTAR A POTENCIA DO PARA PARA NÃO TER QUE RESOVLER O PROBLEMA DESLIGANDO E LIGANDO.
+// CAPTAR FUNÇÕES DE DIMINUIR E ALMENTAR A POTENCIA DO PARA PARA NÃO TER QUE RESOVLER O PROBLEMA SINEBTE DESLIGANDO E LIGANDO.
 // TEMPORIZAR AS AÇÕES DE 5 EM 5 MINUTOS. 
 
 
@@ -62,9 +62,9 @@ void loop()
 
 
 
-      if (temperature == 24 ){delay(1000); verdeFuncao();}
-      if (temperature > 24){delay(1000); vermelhoFuncao();}
-      if (temperature < 24){delay(1000); azulFuncao();}
+      if (temperature == 24 ){delay(50); verdeFuncao();}
+      if (temperature > 24){delay(50); vermelhoFuncao();}
+      if (temperature < 24){delay(50); azulFuncao();}
 
 
 
@@ -73,7 +73,7 @@ void loop()
     {
     digitalWrite(pinled, LOW);
     digitalWrite(pinledv, LOW);
-  //  Serial.println("Parado");
+    Serial.print("Apesar do movimento manter desligado !!! - ");
     estado=0;
     }
   else
@@ -81,7 +81,7 @@ void loop()
       if (temperature >23) {
     digitalWrite(pinled, HIGH);
     digitalWrite(pinledv, HIGH);
-  //  Serial.println("Movimento !!!");
+    Serial.print("Movimento !!! - ");
     estado=1;
        
     
@@ -89,7 +89,7 @@ void loop()
       else{
     digitalWrite(pinled, LOW);
     digitalWrite(pinledv, LOW);
-  //  Serial.println("Parado");
+    Serial.print(" - Parado - ");
     estado=0; }
     }
 
@@ -100,6 +100,8 @@ void loop()
     SendChannelUpCode();
     estadoAnterior=estado;
     }
+
+    
 } 
 
 
@@ -821,5 +823,5 @@ void printDate(){
   Serial.print(minuto);
   Serial.print(":");
   Serial.print(segundo);
-
+  Serial.print(" - ");
 }
