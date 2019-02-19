@@ -1,3 +1,9 @@
+// CAPTAR FUNÇÕES DE DIMINUIR E ALMENTAR A POTENCIA DO PARA PARA NÃO TER QUE RESOVLER O PROBLEMA DESLIGANDO E LIGANDO.
+// TEMPORIZAR AS AÇÕES DE 5 EM 5 MINUTOS. 
+
+
+
+
 //realtime
 #include "Wire.h"
 #define DS1307_ADDRESS 0x68
@@ -45,7 +51,6 @@ void loop()
 
 //realtime
   printDate(); // delay(1000);
-
 
  //temperatura  
   int temperature = temp.getTemp(); //VARIÁVEL DO TIPO INTEIRO QUE RECEBE O VALOR DE TEMPERATURA CALCULADO PELA BIBLIOTECA
