@@ -1,3 +1,9 @@
+//realtime
+#include "Wire.h"
+#define DS1307_ADDRESS 0x68
+byte zero = 0x00;
+
+
 #include <Thermistor.h> //INCLUSÃO DA BIBLIOTECA
  
 Thermistor temp(2);
@@ -19,38 +25,41 @@ String cor;
 
 void setup()
   {
+    Wire.begin();
     pinMode(pinled, OUTPUT); 
     pinMode(pinledv, OUTPUT);
     pinMode(IRledPin, OUTPUT); 
     pinMode(pinopir, INPUT);
     Serial.begin(9600);
-       pinMode(azul, OUTPUT);
-   pinMode(verde, OUTPUT);
-   pinMode(vermelho, OUTPUT);
-       delay(1000);
+    pinMode(azul, OUTPUT);
+    pinMode(verde, OUTPUT);
+    pinMode(vermelho, OUTPUT);
+    delay(1000);
+
+   // setDateTime();
   }
  
 void loop()
   {
 
-//temperatura
+
+//realtime
+  printDate(); // delay(1000);
 
 
-
-
-    
+ //temperatura  
   int temperature = temp.getTemp(); //VARIÁVEL DO TIPO INTEIRO QUE RECEBE O VALOR DE TEMPERATURA CALCULADO PELA BIBLIOTECA
-  Serial.print("Temperatura: "); //IMPRIME O TEXTO NO MONITOR SERIAL
+  Serial.print(" Temperatura: "); //IMPRIME O TEXTO NO MONITOR SERIAL
   Serial.print(temperature); //IMPRIME NO MONITOR SERIAL A TEMPERATURA MEDIDA
-  Serial.println("*C"); //IMPRIME O TEXTO NO MONITOR SERIAL
+  Serial.println("*C "); //IMPRIME O TEXTO NO MONITOR SERIAL
   // delay(1000); //INTERVALO DE 1 SEGUNDO
   acionamento = digitalRead(pinopir);
 
 
 
-      if (temperature >= 23 && temperature <=25 ){delay(1000); verdeFuncao();}
-      if (temperature > 26){delay(1000); vermelhoFuncao();}
-      if (temperature < 22){delay(1000); azulFuncao();}
+      if (temperature == 24 ){delay(1000); verdeFuncao();}
+      if (temperature > 24){delay(1000); vermelhoFuncao();}
+      if (temperature < 24){delay(1000); azulFuncao();}
 
 
 
@@ -64,7 +73,7 @@ void loop()
     }
   else
     {
-      if (temperature >26) {
+      if (temperature >23) {
     digitalWrite(pinled, HIGH);
     digitalWrite(pinledv, HIGH);
   //  Serial.println("Movimento !!!");
@@ -737,4 +746,75 @@ delayMicroseconds(1840);
 pulseIR(400);
 delayMicroseconds(1820);
 pulseIR(420);}
+}
+
+
+
+void setDateTime(){
+
+  byte segundo =      00;  //0-59
+  byte minuto =        36;  //0-59
+  byte hora =           20;  //0-23
+  byte diasemana =    2;  //1-7
+  byte dia =               18;  //1-31
+  byte mes =            02; //1-12
+  byte ano  =            19; //0-99
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(zero); 
+
+  Wire.write(decToBcd(segundo));
+  Wire.write(decToBcd(minuto));
+  Wire.write(decToBcd(hora));
+  Wire.write(decToBcd(diasemana));
+  Wire.write(decToBcd(dia));
+  Wire.write(decToBcd(mes));
+  Wire.write(decToBcd(ano));
+
+  Wire.write(zero); 
+
+  Wire.endTransmission();
+
+}
+
+byte decToBcd(byte val){
+// Conversão de decimal para binário
+  return ( (val/10*16) + (val%10) );
+}
+
+byte bcdToDec(byte val)  {
+// Conversão de binário para decimal
+  return ( (val/16*10) + (val%16) );
+}
+
+void printDate(){
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(zero);
+  Wire.endTransmission();
+
+  Wire.requestFrom(DS1307_ADDRESS, 7);
+
+  int segundo = bcdToDec(Wire.read());
+  int minuto = bcdToDec(Wire.read());
+  int hora = bcdToDec(Wire.read() & 0b111111);    //Formato 24 horas
+  int diasemana = bcdToDec(Wire.read());             //0-6 -> Domingo - Sábado
+  int dia = bcdToDec(Wire.read());
+  int mes = bcdToDec(Wire.read());
+  int ano = bcdToDec(Wire.read());
+
+//Exibe a data e hora. Ex.:   3/12/13 19:00:00
+  
+  Serial.print(dia);
+  Serial.print("/");
+  Serial.print(mes);
+  Serial.print("/20");
+  Serial.print(ano);
+  Serial.print(" ");
+  Serial.print(hora);
+  Serial.print(":");
+  Serial.print(minuto);
+  Serial.print(":");
+  Serial.print(segundo);
+
 }
