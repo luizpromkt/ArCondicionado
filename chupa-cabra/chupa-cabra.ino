@@ -1,5 +1,5 @@
 #define IRpin_PIN PIND
-#define IRpin 2
+#define IRpin 3
 #define MAXPULSE 65000
 #define RESOLUTION 20
  
