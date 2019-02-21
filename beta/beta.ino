@@ -1,8 +1,9 @@
-// CAPTAR FUNÇÕES DE DIMINUIR E ALMENTAR A POTENCIA DO PARA PARA NÃO TER QUE RESOVLER O PROBLEMA SINEBTE DESLIGANDO E LIGANDO.
-// TEMPORIZAR AS AÇÕES DE 5 EM 5 MINUTOS. 
+//servo
+#include <Servo.h>
 
 
-
+Servo horizontal;
+Servo vertical;
 
 //realtime
 #include "Wire.h"
@@ -43,14 +44,23 @@ void setup()
     delay(1000);
 
    // setDateTime();
+//servo
+  horizontal.attach(9);
+  vertical.attach(6);
+ vertical.write(155);
+ horizontal.write(90);
+
+  
   }
  
 void loop()
   {
 
+//servo
 
 //realtime
   printDate(); // delay(1000);
+
 
  //temperatura  
   int temperature = temp.getTemp(); //VARIÁVEL DO TIPO INTEIRO QUE RECEBE O VALOR DE TEMPERATURA CALCULADO PELA BIBLIOTECA
@@ -62,9 +72,9 @@ void loop()
 
 
 
-      if (temperature == 24 ){delay(50); verdeFuncao();}
-      if (temperature > 24){delay(50); vermelhoFuncao();}
-      if (temperature < 24){delay(50); azulFuncao();}
+      if (temperature == 24 ){delay(1000); verdeFuncao();}
+      if (temperature > 24){delay(1000); vermelhoFuncao();}
+      if (temperature < 24){delay(1000); azulFuncao();}
 
 
 
@@ -73,7 +83,7 @@ void loop()
     {
     digitalWrite(pinled, LOW);
     digitalWrite(pinledv, LOW);
-    Serial.print("Apesar do movimento manter desligado !!! - ");
+  //  Serial.println("Parado");
     estado=0;
     }
   else
@@ -81,7 +91,7 @@ void loop()
       if (temperature >23) {
     digitalWrite(pinled, HIGH);
     digitalWrite(pinledv, HIGH);
-    Serial.print("Movimento !!! - ");
+  //  Serial.println("Movimento !!!");
     estado=1;
        
     
@@ -89,7 +99,7 @@ void loop()
       else{
     digitalWrite(pinled, LOW);
     digitalWrite(pinledv, LOW);
-    Serial.print(" - Parado - ");
+  //  Serial.println("Parado");
     estado=0; }
     }
 
@@ -100,8 +110,6 @@ void loop()
     SendChannelUpCode();
     estadoAnterior=estado;
     }
-
-    
 } 
 
 
@@ -823,5 +831,5 @@ void printDate(){
   Serial.print(minuto);
   Serial.print(":");
   Serial.print(segundo);
-  Serial.print(" - ");
+
 }
