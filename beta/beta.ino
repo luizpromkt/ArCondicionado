@@ -47,7 +47,7 @@ void setup()
 //servo
   horizontal.attach(9);
   vertical.attach(6);
- vertical.write(155);
+ vertical.write(175);
  horizontal.write(90);
 
   
@@ -72,9 +72,9 @@ void loop()
 
 
 
-      if (temperature == 24 ){delay(1000); verdeFuncao();}
-      if (temperature > 24){delay(1000); vermelhoFuncao();}
-      if (temperature < 24){delay(1000); azulFuncao();}
+      if (temperature == 24 ){delay(500); verdeFuncao();}
+      if (temperature > 24){delay(500); vermelhoFuncao();}
+      if (temperature < 24){delay(500); azulFuncao();}
 
 
 
@@ -559,7 +559,7 @@ pulseIR(400);
 delayMicroseconds(1820);
 pulseIR(420);
 
-delay(1000);
+delay(500);
 
 delayMicroseconds(5392);
 pulseIR(4360);
