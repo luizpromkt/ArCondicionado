@@ -413,6 +413,7 @@ pulseIR(440);
 
 
 23
+
 delayMicroseconds(39920);
 pulseIR(4420);
 delayMicroseconds(4620);
@@ -614,7 +615,7 @@ pulseIR(460);
 delayMicroseconds(1780);
 pulseIR(460);
 
-22
+24
 
 delayMicroseconds(53780);
 pulseIR(4420);
